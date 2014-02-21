@@ -18,9 +18,161 @@ class Application(Tkinter.Tk):
         Tkinter.Tk.__init__(self, parent)
         self.parent = parent
 
-        self.vcodecs = [u"libtheora", u"libvpx", u"libwebp", u"libx264", u"libx264rgb", u"libxvid", u"png", u"ProRes"]
-        self.acodecs = [u"aac", u"ac3", u"ac3_fixed", u"libfaac" u"libfdk_aac", u"libmp3lame", u"libopencore-amrnb", u"libshine", u"libtwolame", u"libvo-aacenc", u"libvo-amrwbenc", u"libopus", u"libvorbis", u"libwavpack", u"wavpack"]
-        self.formats = [u"null", u"mov", u"ismv", u"mp3", u"ogg", u"aiff", u"crc", u"framecrc", u"md5", u"framemd5", u"gif", u"hls", u"ico", u"image2", u"matroska", u"mpegts"]
+        self.vcodecs = [
+            u"libtheora",
+            u"libvpx",
+            u"libwebp",
+            u"libx264",
+            u"libx264rgb",
+            u"libxvid",
+            u"png",
+            u"ProRes"
+        ]
+
+        self.acodecs = [
+            u"aac",
+            u"ac3",
+            u"ac3_fixed",
+            u"libfaac"
+            u"libfdk_aac",
+            u"libmp3lame",
+            u"libopencore-amrnb",
+            u"libshine",
+            u"libtwolame",
+            u"libvo-aacenc",
+            u"libvo-amrwbenc",
+            u"libopus",
+            u"libvorbis",
+            u"libwavpack",
+            u"wavpack"
+        ]
+
+        self.formats = [
+            u"null",
+            u"mov",
+            u"ismv",
+            u"mp3",
+            u"ogg",
+            u"aiff",
+            u"crc",
+            u"framecrc",
+            u"md5",
+            u"framemd5",
+            u"gif",
+            u"hls",
+            u"ico",
+            u"image2",
+            u"matroska",
+            u"mpegts"
+        ]
+
+        self.pixfmts = [
+            u"yuv420p",
+            u"yuv422p",
+            u"yuv444p",
+            u"yuv422",
+            u"yuv410p",
+            u"yuv411p",
+            u"yuvj420p",
+            u"yuvj422p",
+            u"yuvj444p",
+            u"rgb24",
+            u"bgr24",
+            u"rgba32",
+            u"rgb565",
+            u"rgb555",
+            u"gray",
+            u"monow",
+            u"monob",
+            u"pal8",
+        ]
+
+        self.presets = {
+            'H.264 720p': {
+                'vcodec':        'libx264',
+                'vb':            '3500k',
+                'width':         1280,
+                'height':        720,
+                'qmax':          51,
+                'qmin':          11,
+                'pix_fmt':       'yuv420p',
+                'acodec':        'aac',
+                'ar':            44100,
+                'ab':            '128k',
+                'format':        'mp4',
+                'extraOptions':  '-movflags faststart'
+            },
+            'H.264 576p': {
+                'vcodec':        'libx264',
+                'vb':            '2000k',
+                'width':         1024,
+                'height':        576,
+                'qmax':          51,
+                'qmin':          11,
+                'pix_fmt':       'yuv420p',
+                'acodec':        'aac',
+                'ar':            44100,
+                'ab':            '128k',
+                'format':        'mp4',
+                'extraOptions':  '-movflags faststart'
+            },
+            'H.264 360p': {
+                'vcodec':        'libx264',
+                'vb':            '1000k',
+                'width':         640,
+                'height':        360,
+                'qmax':          51,
+                'qmin':          11,
+                'pix_fmt':       'yuv420p',
+                'acodec':        'aac',
+                'ar':            44100,
+                'ab':            '128k',
+                'format':        'mp4',
+                'extraOptions':  '-movflags faststart -maxrate 1500k -bufsize 3000k'
+            },
+            'WebM 720p': {
+                'vcodec':        'libvpx',
+                'vb':            '3500k',
+                'width':         1280,
+                'height':        720,
+                'qmax':          51,
+                'qmin':          11,
+                'pix_fmt':       'yuv420p',
+                'acodec':        'libvorbis',
+                'ar':            44100,
+                'ab':            '128k',
+                'format':        'webm',
+                'extraOptions':  '-quality good'
+            },
+            'WebM 576p': {
+                'vcodec':        'libvpx',
+                'vb':            '2000k',
+                'width':         1024,
+                'height':        576,
+                'qmax':          51,
+                'qmin':          11,
+                'pix_fmt':       'yuv420p',
+                'acodec':        'libvorbis',
+                'ar':            44100,
+                'ab':            '128k',
+                'format':        'webm',
+                'extraOptions':  '-quality good'
+            },
+            'WebM 360p': {
+                'vcodec':        'libvpx',
+                'vb':            '1500k',
+                'width':         640,
+                'height':        360,
+                'qmax':          51,
+                'qmin':          11,
+                'pix_fmt':       'yuv420p',
+                'acodec':        'libvorbis',
+                'ar':            44100,
+                'ab':            '128k',
+                'format':        'webm',
+                'extraOptions':  '-quality good'
+            },
+        }
 
         self.initialize()
 
@@ -78,10 +230,32 @@ class Application(Tkinter.Tk):
 
 
 
+        # Preset
+
+        preset = Tkinter.LabelFrame(self, text=u"Preset")
+        preset.grid(row=2, columnspan=2, sticky='WE', padx=5, pady=5, ipadx=5, ipady=5)
+
+
+        # presets list
+
+        presetsLbl = Tkinter.Label(preset, text=u"Use a preset")
+        presetsLbl.grid(row=0, column=0, sticky='E', padx=5, pady=2)
+
+        presets = []
+        for presetName, presetOptions in self.presets.iteritems():
+            presets.append(presetName)
+
+        self.presetsVar = Tkinter.StringVar()
+        self.presetsVar.trace("w", self.OnPresetSelected)
+        self.presetsList = Tkinter.OptionMenu(preset, self.presetsVar, *presets)
+        self.presetsList.grid(row=0, column=1, sticky="w", padx=5, pady=2)
+
+
+
         # Video options
 
         video = Tkinter.LabelFrame(self, text=u"Video options")
-        video.grid(row=2, column=0, sticky='NWES', padx=5, pady=5, ipadx=5, ipady=5)
+        video.grid(row=3, column=0, sticky='NWES', padx=5, pady=5, ipadx=5, ipady=5)
 
 
         # video codec
@@ -90,7 +264,6 @@ class Application(Tkinter.Tk):
         vcodecLbl.grid(row=0, column=0, sticky='E', padx=5, pady=2)
 
         self.vcodecVar = Tkinter.StringVar()
-        self.vcodecVar.set(self.vcodecs[0])
         self.vcodecList = Tkinter.OptionMenu(video, self.vcodecVar, *self.vcodecs)
         self.vcodecList.grid(row=0, column=1, sticky="w", padx=5, pady=2)
 
@@ -100,7 +273,7 @@ class Application(Tkinter.Tk):
         vbLbl.grid(row=1, column=0, sticky="E", padx=5, pady=2)
 
         self.vbVar = Tkinter.StringVar()
-        self.vbVar.set(u"3500k")
+        self.vbVar.set(0)
         self.vb = Tkinter.Entry(video,textvariable=self.vbVar)
         self.vb.grid(row=1, column=1, sticky="W", padx=5, pady=2)
 
@@ -110,7 +283,6 @@ class Application(Tkinter.Tk):
         widthLbl.grid(row=2, column=0, sticky="E", padx=5, pady=2)
 
         self.widthVar = Tkinter.IntVar()
-        self.widthVar.set(u"1280")
         self.width = Tkinter.Entry(video,textvariable=self.widthVar)
         self.width.grid(row=2, column=1, sticky="W", padx=5, pady=2)
 
@@ -120,16 +292,45 @@ class Application(Tkinter.Tk):
         heightLbl.grid(row=3, column=0, sticky="E", padx=5, pady=2)
 
         self.heightVar = Tkinter.IntVar()
-        self.heightVar.set(u"720")
         self.height = Tkinter.Entry(video,textvariable=self.heightVar)
         self.height.grid(row=3, column=1, sticky="W", padx=5, pady=2)
+
+        # pixel format
+
+        pixfmtLbl = Tkinter.Label(video, text=u"Pixel format")
+        pixfmtLbl.grid(row=4, column=0, sticky='E', padx=5, pady=2)
+
+        self.pixfmtVar = Tkinter.StringVar()
+        self.pixfmtList = Tkinter.OptionMenu(video, self.pixfmtVar, *self.pixfmts)
+        self.pixfmtList.grid(row=4, column=1, sticky="W", padx=5, pady=2)
+
+        # frame rate
+
+        fpsLbl = Tkinter.Label(video, text=u"Frame rate")
+        fpsLbl.grid(row=5, column=0, sticky='E', padx=5, pady=2)
+
+        self.fpsVar = Tkinter.IntVar()
+        self.fps = Tkinter.Entry(video, textvariable=self.fpsVar)
+        self.fps.grid(row=5, column=1, sticky="W", padx=5, pady=2)
+
+        # min quality
+
+        self.qmin = Tkinter.Scale(video, from_=-1, to=69, orient=Tkinter.HORIZONTAL, label=u"Minimum quality")
+        self.qmin.grid(row=6, column=0, columnspan=2, sticky="WE", padx=5, pady=2)
+        self.qmin.set(2)
+
+        # max quality
+
+        self.qmax = Tkinter.Scale(video, from_=-1, to=1024, orient=Tkinter.HORIZONTAL, label=u"Maximum quality")
+        self.qmax.grid(row=7, column=0, columnspan=2, sticky="WE", padx=5, pady=2)
+        self.qmax.set(31)
 
 
 
         # Audio options
 
         audio = Tkinter.LabelFrame(self, text=u"Audio options")
-        audio.grid(row=2, column=1, sticky='NWES', padx=5, pady=5, ipadx=5, ipady=5)
+        audio.grid(row=3, column=1, sticky='NWES', padx=5, pady=5, ipadx=5, ipady=5)
 
         # audio codec
 
@@ -137,7 +338,6 @@ class Application(Tkinter.Tk):
         vcodecLbl.grid(row=0, column=0, sticky="E", padx=5, pady=2)
 
         self.acodecVar = Tkinter.StringVar()
-        self.acodecVar.set(self.acodecs[0])
         self.acodecList = Tkinter.OptionMenu(audio, self.acodecVar, *self.acodecs)
         self.acodecList.grid(row=0, column=1, sticky="W", padx=5, pady=2)
 
@@ -147,9 +347,8 @@ class Application(Tkinter.Tk):
         arLbl.grid(row=1, column=0, sticky="E", padx=5, pady=2)
 
         self.arVar = Tkinter.IntVar()
-        self.arVar.set(u"44100")
         self.ar = Tkinter.Entry(audio,textvariable=self.arVar)
-        self.ar.grid(row=1, column=1, sticky="W", padx=5, pady=2)
+        self.ar.grid(row=1, column=1, sticky="W", pady=2)
 
         # Audio bitrate
 
@@ -157,7 +356,7 @@ class Application(Tkinter.Tk):
         abLbl.grid(row=2, column=0, sticky="E", padx=5, pady=2)
 
         self.abVar = Tkinter.StringVar()
-        self.abVar.set(u"128k")
+        self.abVar.set(0)
         self.ab = Tkinter.Entry(audio, textvariable=self.abVar)
         self.ab.grid(row=2, column=1, sticky="W", padx=5, pady=2)
 
@@ -166,7 +365,7 @@ class Application(Tkinter.Tk):
         # Options
 
         options = Tkinter.LabelFrame(self, text=u"Options")
-        options.grid(row=3, columnspan=2, sticky='WE', padx=5, pady=5, ipadx=5, ipady=5)
+        options.grid(row=4, columnspan=2, sticky='WE', padx=5, pady=5, ipadx=5, ipady=5)
 
 
         # Format
@@ -175,40 +374,29 @@ class Application(Tkinter.Tk):
         formatLbl.grid(row=0, column=0, sticky="E", padx=5, pady=2)
 
         self.formatVar = Tkinter.StringVar()
-        self.formatVar.set(self.formats[0])
         self.formatList = Tkinter.OptionMenu(options, self.formatVar, *self.formats)
         self.formatList.grid(row=0, column=1, sticky="W", padx=5, pady=2)
 
         # Format options
 
-        formatOptionsLbl = Tkinter.Label(options, text="Format options")
-        formatOptionsLbl.grid(row=1, column=0, sticky='E', padx=5, pady=2)
-
-        self.formatOptionsVar = Tkinter.StringVar()
-        self.formatOptionsVar.set(u"-movflags faststart");
-        formatOptionsTxt = Tkinter.Entry(options, textvariable=self.formatOptionsVar, width="50")
-        formatOptionsTxt.grid(row=1, column=1, sticky="WE", pady=3)
-
-        # Format options
-
         extraOptionsLbl = Tkinter.Label(options, text="Extra options")
-        extraOptionsLbl.grid(row=2, column=0, sticky='E', padx=5, pady=2)
+        extraOptionsLbl.grid(row=1, column=0, sticky='E', padx=5, pady=2)
 
         self.extraOptionsVar = Tkinter.StringVar()
-        extraOptionsTxt = Tkinter.Entry(options, textvariable=self.extraOptionsVar, width="50")
-        extraOptionsTxt.grid(row=2, column=1, sticky="WE", pady=3)
+        extraOptionsTxt = Tkinter.Entry(options, textvariable=self.extraOptionsVar, width="65")
+        extraOptionsTxt.grid(row=1, column=1, sticky="WE", pady=3)
 
 
 
         # Encode button
 
         encodeButton = Tkinter.Button(self, text=u"Encode", command=self.OnEncodeClick)
-        encodeButton.grid(row=4, column=0, sticky='NWES', padx=5, pady=2)
+        encodeButton.grid(row=5, column=0, sticky='NWES', padx=5, pady=2)
 
         # Progress bar
 
-        self.progress = ttk.Progressbar(self, orient='horizontal', mode="determinate", length=100)
-        self.progress.grid(row=4, column=1, sticky="WE", pady=3)
+        self.progress = ttk.Progressbar(self, orient='horizontal', mode="determinate")
+        self.progress.grid(row=5, column=1, sticky="WE", padx=5, pady=3)
 
 
 
@@ -228,6 +416,23 @@ class Application(Tkinter.Tk):
 
         self.outputFileVar.set(self.outputFile)
 
+    def OnPresetSelected(self, *argv):
+        preset = self.presetsVar.get()
+        if self.presets[preset]:
+            preset = self.presets[preset]
+            self.vcodecVar.set(preset['vcodec'])
+            self.vbVar.set(preset['vb'])
+            self.widthVar.set(preset['width'])
+            self.heightVar.set(preset['height'])
+            self.qmax.set(preset['qmax'])
+            self.qmin.set(preset['qmin'])
+            self.pixfmtVar.set(preset['pix_fmt'])
+            self.acodecVar.set(preset['acodec'])
+            self.arVar.set(preset['ar'])
+            self.abVar.set(preset['ab'])
+            self.formatVar.set(preset['format'])
+            self.extraOptionsVar.set(preset['extraOptions'])
+
     def OnEncodeClick(self):
         if self.inputFiles:
             files = self.splitlist(self.inputFiles)
@@ -240,11 +445,12 @@ class Application(Tkinter.Tk):
     def encodeFile(self, filename):
         output = self.outputFileVar.get()
         format = self.formatVar.get()
-        formatOptions = self.formatOptionsVar.get()
         vcodec = self.vcodecVar.get()
         vb = self.vbVar.get()
-        qmax = 51
-        qmin = 11
+        fps = self.fpsVar.get()
+        qmax = self.qmax.get()
+        qmin = self.qmin.get()
+        pixfmt = self.pixfmtVar.get()
         width = self.widthVar.get()
         height = self.heightVar.get()
         acodec = self.acodecVar.get()
@@ -252,11 +458,14 @@ class Application(Tkinter.Tk):
         ab = self.abVar.get()
         extraOptions = self.extraOptionsVar.get()
 
-        cmd = 'ffmpeg -i {0} -y {1} -f {2} {3}'.format(filename, output, format, formatOptions)
-        video = '-vcodec {0} -vb {1} -qmax {2} -qmin {3} -pix_fmt yuv420p -vf "scale=iw*min({4}/iw\,{5}/ih):ih*min({4}/iw\,{5}/ih),pad={4}:{5}:({4}-iw)/2:({5}-ih)/2"'.format(vcodec, vb, qmax, qmin, width, height)
+        cmd = 'ffmpeg -i {0} -y {1} -f {2}'.format(filename, output, format)
+        video = '-vcodec {0} -vb {1} -qmax {2} -qmin {3} -pix_fmt {4}'.format(vcodec, vb, qmax, qmin, pixfmt)
+        if fps:
+            video += ' -r {}'.format(fps)
+        scale = '-vf "scale=iw*min({0}/iw\,{1}/ih):ih*min({0}/iw\,{1}/ih),pad={0}:{1}:({0}-iw)/2:({1}-ih)/2"'.format(width, height)
         audio = '-acodec {0} -ar {1} -ab {2}'.format(acodec, ar, ab)
-        options = '-strict experimental -threads 0'
-        cmd = cmd + ' ' + video + ' ' + audio + ' ' + options + ' ' + extraOptions
+        options = '-strict experimental -threads 0' + ' ' + extraOptions
+        cmd = cmd + ' ' + video + ' ' + scale + ' ' + audio + ' ' + options
         # print cmd
 
         cmd = subprocess.Popen(cmd, shell=True, stderr=subprocess.PIPE)
