@@ -18,8 +18,8 @@ class Application(Tkinter.Tk):
         Tkinter.Tk.__init__(self, parent)
         self.parent = parent
 
-        self.vcodecs = [u"libx264"]
-        self.acodecs = [u"aac"]
+        self.vcodecs = [u"libtheora", u"libvpx", u"libwebp", u"libx264", u"libx264rgb", u"libxvid", u"png", u"ProRes"]
+        self.acodecs = [u"aac", u"ac3", u"ac3_fixed", u"libfaac" u"libfdk_aac", u"libmp3lame", u"libopencore-amrnb", u"libshine", u"libtwolame", u"libvo-aacenc", u"libvo-amrwbenc", u"libopus", u"libvorbis", u"libwavpack", u"wavpack"]
         self.formats = [u"null", u"mov", u"ismv", u"mp3", u"ogg", u"aiff", u"crc", u"framecrc", u"md5", u"framemd5", u"gif", u"hls", u"ico", u"image2", u"matroska", u"mpegts"]
 
         self.initialize()
